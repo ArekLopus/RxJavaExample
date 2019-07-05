@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  
+  grafana:
+    image: arkady1/rxjava-grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - mynet
+  
+  prometheus:
+    image: arkady1/rxjava-prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - mynet
+    
+  rxjava:
+    image: arkady1/rxjava-rxexample
+    container_name: rxjava
+    ports:
+      - "8080:8080"
+    networks:
+      - mynet
+  
+networks:
+  mynet:

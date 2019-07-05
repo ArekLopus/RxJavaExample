@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rxjava-prometheus
+  labels:
+    rxjava: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      rxjava: prometheus
+  template:
+    metadata:
+      labels:
+        rxjava: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: arkady1/rxjava-prometheus
+        ports:
+        - containerPort: 9090
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  labels:
+    svc: rxjava-prometheus
+spec:
+  ports:
+  - port: 9090
+    targetPort: 9090
+  selector:
+    rxjava: prometheus
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rxjava-grafana
+  labels:
+    rxjava: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      rxjava: grafana
+  template:
+    metadata:
+      labels:
+        rxjava: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: arkady1/rxjava-grafana
+        ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    svc: rxjava-grafana
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30000
+  selector:
+    rxjava: grafana
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rxjava-rxexample
+  labels:
+    rxjava: rxexample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      rxjava: rxexample
+  template:
+    metadata:
+      labels:
+        rxjava: rxexample
+    spec:
+      containers:
+      - name: prometheus
+        image: arkady1/rxjava-rxexample
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rxjava
+  labels:
+    svc: rxjava-rxexample
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    rxjava: rxexample
